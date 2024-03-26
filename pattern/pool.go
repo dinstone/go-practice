@@ -8,7 +8,7 @@ import (
 )
 
 type Pool struct {
-	m         sync.Mutex
+	lock      sync.Mutex
 	resources chan io.Closer
 	factory   func() (io.Closer, error)
 	closed    bool
@@ -39,8 +39,8 @@ func (p *Pool) Acquire() (io.Closer, error) {
 }
 
 func (p *Pool) Release(r io.Closer) {
-	p.m.Lock()
-	defer p.m.Unlock()
+	p.lock.Lock()
+	defer p.lock.Unlock()
 
 	if p.closed {
 		r.Close()
@@ -57,8 +57,8 @@ func (p *Pool) Release(r io.Closer) {
 }
 
 func (p *Pool) Close() {
-	p.m.Lock()
-	defer p.m.Unlock()
+	p.lock.Lock()
+	defer p.lock.Unlock()
 
 	if p.closed {
 		return
