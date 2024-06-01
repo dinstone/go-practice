@@ -105,8 +105,8 @@ func (p *poolExecutor) decrementWorker() {
 }
 
 // Execute implements Executor.
-func (p *poolExecutor) Execute(fn func(wid int)) error {
-	task := task{run: fn}
+func (p *poolExecutor) Execute(t func(wid int)) error {
+	task := task{run: t}
 	select {
 	case p.queue <- task:
 	default:
