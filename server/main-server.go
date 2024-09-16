@@ -45,16 +45,18 @@ func handleConnection(conn net.Conn) {
 	// 读取客户端发送的数据
 	reader := bufio.NewReader(conn)
 	for {
-		message, err := reader.ReadString('\n')
+		var readBytes [1024]byte
+		n, err := reader.Read(readBytes[:])
 		if err != nil {
 			if err != io.EOF {
 				fmt.Println("Error reading from connection:", err)
 			}
 			break
 		}
-		fmt.Print("Message received:", message)
+		data := string(readBytes[:n])
+		fmt.Print("Message received: ", data)
 
 		// 发送回应给客户端
-		conn.Write([]byte("Message received.\n"))
+		conn.Write([]byte(data))
 	}
 }
