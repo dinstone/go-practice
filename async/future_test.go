@@ -18,6 +18,6 @@ func TestFuture(t *testing.T) {
 	} else {
 		fmt.Println(result)
 	}
-	//睡眠是为了让任务成功取消，而不是因为程序退出而取消
+	//睡眠是为了让任务成功取消，而不会因为程序退出而取消
 	time.Sleep(10 * time.Second)
 }
